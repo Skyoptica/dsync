@@ -1,0 +1,14 @@
+# dsync global configuration
+# v0.1
+
+editors:
+    cli:
+        darwin: 'nano %file'
+        linux: 'vi %file'
+        windows: 'echo Windows lacks a default cli editor. Set one in %USERPROFILE%\AppData\dsync\dsyncglobal.yml'
+        
+    gui:
+        darwin: 'open -t %file'
+        linux: 'xdg-open %file &> /dev/null'
+        windows: 'notepad %file'
+
