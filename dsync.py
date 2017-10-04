@@ -2,7 +2,6 @@
 # by: Dylan Dwyer
 # //////////////////////////////
 
-import sys, os, time, platform,\
 import sys, os, time, platform
 import dsync_config, dsync_ui,\
        comarg
