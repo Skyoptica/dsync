@@ -32,4 +32,5 @@ def is_configured(subject):
 
 # config mode
 def config_mode(subject):
-    return '...'
+    dsync_ui.status('Configuring directory:\n'+subject)
+    sys.exit()

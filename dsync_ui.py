@@ -16,7 +16,7 @@ def set_ui_modes(os_type, is_gui):
     pass
 
 # displays a message (error or notice) via appropriate interface
-def message(message_text, message_type):
+def message(message_text, message_type = 'notice'):
     print message_text
     if message_type == 'error':
         tkMessageBox.showerror('dsync', message_text)
@@ -28,5 +28,7 @@ def status(status_text):
     status_ui_text = status_text
     print status_ui_text
 
-# display choice prompt
-
+# display main menu
+def show_main_menu():
+    message('- displaying main menu -')
+    sys.exit()

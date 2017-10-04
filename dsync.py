@@ -30,19 +30,29 @@ else:
 dsync_config.initialize(config_dir)
 
 # identify subject directory
-if comarg.mode_value('dir', '!null') == '!null':
-    subject = comarg.positional_value(1, '')
+if comarg.mode_value('dir', None) == None:
+    subject = comarg.positional_value(1, None)
 else:
-    subject = comarg.mode_value('dir', '')
+    subject = comarg.mode_value('dir', None)
 
-dsync_ui.message(subject, 'notice')
-dsync_ui.message(str(sys.argv), 'notice')
-dsync_ui.message(os.getcwd(), 'notice')
+# dsync_ui.message(subject)
+# dsync_ui.status(str(sys.argv))
+dsync_ui.status('Current Working dir:\n'+os.getcwd())
+
+
+# if no Subject was passed, show menu instead...
+if subject is None or comarg.is_mode('menu'):
+    dsync_ui.show_main_menu()
+# check validity of Subject
+if not os.path.isdir(subject):
+    dsync_ui.message('Invalid Subject Directory:\n'+subject+\
+                     '', 'error')
+    sys.exit()
+    
 
 # start config mode if no config present or intitiated by user
 if comarg.is_mode('config') or not dsync_config.is_configured(subject):
     dsync_config.config_mode(subject)
 
-print 'start dsync ops...'
 
 sys.exit()
