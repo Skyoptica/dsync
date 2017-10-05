@@ -2,27 +2,35 @@
 # by: Dylan Dwyer
 # /////////////////////////////////
 
-import sys, os
-import dsync_ui,\
+import sys, os, shutil
+import dsync_var, dsync_ui,\
        yaml
 
-global config_dir
-
 # read or create global config file
-def initialize(init_config_dir):
-    # initialize shared variables
-    config_dir = init_config_dir
-    
+def initialize():
     # checks for existence of (or creates) config directory
-    if not os.path.isdir(config_dir):
+    if not os.path.isdir(dsync_var.config_dir):
         try:
-            os.makedirs(config_dir)
+            os.makedirs(dsync_var.config_dir)
         except Exception as error:
-            dsync_ui.message('There was an error creating the dsync config directory:\n'+str(error), 'error')
+            dsync_ui.message(
+                'There was an error creating the dsync config directory:\n'\
+                +str(error), 'error')
             sys.exit()
             
     # load global configuration file
-
+    global_config_path = os.path.join(dsync_var.config_dir,
+                                      dsync_var.global_config_file_name)
+    if not os.path.isfile(global_config_path):
+        try:
+            default_config = os.path.join(dsync_var.resource_dir,
+                                          dsync_var.global_config_default)
+            shutil.copyfile(default_config, global_config_path)
+        except Exception as error:
+            dsync_ui.message(
+                'There was an error creating the initial dsync config file:\n'\
+                +str(error), 'error')
+            sys.exit()
 
 # checks for existence of subject config file
 def is_configured(subject):

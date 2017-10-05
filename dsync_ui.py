@@ -2,18 +2,12 @@
 # by: Dylan Dwyer
 # //////////////////////////////////
 
-import sys, os,\
-       Tkinter, tkMessageBox, tkSimpleDialog
+import sys, os
+import Tkinter, tkMessageBox, tkSimpleDialog,\
+       dsync_var
 
 root = Tkinter.Tk()
 root.withdraw()
-
-global status_ui_text
-global os_type, is_gui
-status_ui_text = '...'
-
-def set_ui_modes(os_type, is_gui):
-    pass
 
 # displays a message (error or notice) via appropriate interface
 def message(message_text, message_type = 'notice'):
@@ -25,8 +19,8 @@ def message(message_text, message_type = 'notice'):
 
 # updates present status
 def status(status_text):
-    status_ui_text = status_text
-    print status_ui_text
+    dsync_var.status_ui_text = status_text
+    print dsync_var.status_ui_text
 
 # display main menu
 def show_main_menu():
