@@ -2,15 +2,27 @@
 # by: Dylan Dwyer
 # //////////////////////////////
 
-import sys, os, time, platform, shutil
-import dsync_var, dsync_config, dsync_ui,\
-       comarg
+import sys, os, time, platform, argparse, shutil
+import dsync_var, dsync_config, dsync_ui
 
 # adapt to current OS
 dsync_var.os_type = platform.system().lower()
 
+# register argparse flags...
+cliparser = argparse.ArgumentParser()
+cliparser.add_argument('pos_dir', nargs='?', default=None)
+cliparser.add_argument('--dir', help='specify directory to process')
+cliparser.add_argument('-g', '--gui', help='start in gui mode',
+                       action='store_true')
+cliparser.add_argument('-m', '--menu', help='show tool menu',
+                       action='store_true')
+cliparser.add_argument('-c', '--config', help='configure specified directory',
+                       action='store_true')
+cli = cliparser.parse_args()
+
 # determine gui or cli context
-dsync_var.is_gui = comarg.is_mode('gui') or True
+dsync_var.is_gui = cli.gui or True
+dsync_ui.initialize_ui()
 
 os_type = dsync_var.os_type
 if 'darwin' in os_type:
@@ -29,18 +41,18 @@ else:
 dsync_config.initialize()
 
 # identify subject directory
-if comarg.mode_value('dir', None) == None:
-    subject = comarg.positional_value(1, None)
+if cli.dir == None:
+    subject = cli.pos_dir
 else:
-    subject = comarg.mode_value('dir', None)
+    subject = cli.dir
 
 # dsync_ui.message(subject)
 # dsync_ui.status(str(sys.argv))
 dsync_ui.status('Current Working dir:\n'+os.getcwd())
 
 # if no Subject was passed, show menu instead...
-if subject is None or comarg.is_mode('menu'):
-    dsync_ui.show_main_menu()
+if subject is None or cli.menu:
+    dsync_ui.show_tool_menu()
 # establish absolute path for Subject
 subject = os.path.abspath(subject)
 # check validity of Subject
@@ -51,7 +63,7 @@ if not os.path.isdir(subject):
     
 
 # start config mode if no config present or intitiated by user
-if comarg.is_mode('config') or not dsync_config.is_configured(subject):
+if cli.config or not dsync_config.is_configured(subject):
     dsync_config.config_mode(subject)
 
 
